@@ -1,15 +1,8 @@
 pub mod genelist;
 pub mod saveable;
+pub mod activeable;
 
-use crate::{Part, Whole};
-
-
-pub trait RmPart: Part {
-    fn is_active(&self) -> bool;
-}
-pub trait RmWhole: Whole {
-    fn is_illegal(&self) -> bool;
-}
+use crate::{Activeable, Part, Whole};
 
 
 
@@ -27,6 +20,7 @@ pub trait Rolemodel {
     fn calc_prior_llikelihood(&mut self) -> f64;
     fn prior_llikelihood(&self) -> f64;
 
-    fn calc_data_llikelihood(&self) -> f64;
+    fn calc_data_llikelihood(&mut self) -> f64;
     fn data_llikelihood(&self) -> f64;
+    
 }

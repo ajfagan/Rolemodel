@@ -1,5 +1,5 @@
 use crate::{
-    gene_ontology::genes::Gene, rolemodel::saveable::Saveable, Whole,
+    gene_ontology::genes::Gene, rolemodel::saveable::Saveable, Activeable, Part, Whole, Node,
 };
 
 use std::{
@@ -8,11 +8,50 @@ use std::{
         RefCell
     },
     rc::Rc,
+    ops::Deref,
 };
 
+#[derive(Debug)]
 pub struct Term<Td, Gd> {
     data: Td,
     genes: Vec<Rc<RefCell<Gene<Td, Gd>>>>,
+}
+
+impl<Td, Gd> Node for Term<Td, Gd> {
+    type Data = Td;
+    type NeighborType = Rc<RefCell<Gene<Td, Gd>>>;
+
+    fn data(&self) -> &Self::Data {
+        &self.data
+    }
+    fn data_mut(&mut self) -> &mut Self::Data {
+        &mut self.data
+    }
+    fn ref_data(&self) -> Ref<Self::Data> {
+        panic!("Never call ref_data on items not in a RefCell - call data instead");
+    }
+    fn iter_neighbors(&self) -> impl Iterator<Item = Self::NeighborType> {
+        self.genes.clone().into_iter()
+    }
+}
+
+impl<Td, Gd> Node for Rc<RefCell<Term<Td, Gd>>> {
+    type Data = Td;
+    type NeighborType = Rc<RefCell<Gene<Td, Gd>>>;
+
+    fn data(&self) -> &Self::Data {
+        panic!("Cannot borrow data from inside a RefCell - use ref_data instead")
+    }
+    fn data_mut(&mut self) -> &mut Self::Data {
+        panic!("Cannot borrow data from inside a RefCell - use ref_data_mut instead")
+    }
+    fn ref_data(&self) -> Ref<Self::Data> {
+        Ref::map(self.borrow(), |whole| &whole.data)
+    }
+    
+    fn iter_neighbors(&self) -> impl Iterator<Item = Self::NeighborType> {
+        self.borrow().genes.clone().into_iter()
+    }
 }
 
 impl<Td, Gd> Term<Td, Gd> {
@@ -27,20 +66,7 @@ impl<Td, Gd> Term<Td, Gd> {
     }
 }
 
-impl<Td, Gd> Whole for Term<Td, Gd> {
-    type Data = Td;
-    type PartNode = Rc<RefCell<Gene<Td, Gd>>>;
-
-    fn borrow_data(&self) -> Option<&Self::Data> {
-        Some(&self.data)
-    }
-    fn data(&self) -> Option<Ref<Self::Data>> {
-        None
-    }
-    fn parts(&self) -> impl Iterator<Item = Self::PartNode> {
-        self.genes.iter().cloned()
-    }
-}
+impl<Td, Gd> Whole for Term<Td, Gd> { }
 
 impl<Td, Gd> Saveable for Term<Td, Gd> 
 where 
@@ -62,20 +88,7 @@ where
     }
 }
 
-impl<Td, Gd> Whole for Rc<RefCell<Term<Td, Gd>>> {
-    type Data = Td;
-    type PartNode = Rc<RefCell<Gene<Td, Gd>>>;
-
-    fn borrow_data(&self) -> Option<&Self::Data> {
-        None
-    }
-    fn data(&self) -> Option<Ref<Self::Data>> {
-        Some(Ref::map(self.borrow(), |whole| &whole.data))
-    }
-    fn parts(&self) -> impl Iterator<Item = Self::PartNode> {
-        self.borrow().genes.clone().into_iter()
-    }
-}
+impl<Td, Gd> Whole for Rc<RefCell<Term<Td, Gd>>> { }
 
 impl<Td, Gd> Saveable for Rc<RefCell<Term<Td, Gd>>> 
 where 
@@ -90,9 +103,9 @@ where
         self.borrow_mut().data.restore();
     }
     fn current(&self) -> Self::Output {
-        self.data().unwrap().current()
+        self.data().current()
     }
     fn saved(&self) -> Self::Output {
-        self.data().unwrap().saved()
+        self.data().saved()
     }
 }
