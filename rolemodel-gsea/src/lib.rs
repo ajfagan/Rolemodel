@@ -97,3 +97,6 @@ pub use rolemodel::{
     genelist::GeneListRolemodel,
     activeable::Activeable,
 };
+pub use gene_ontology::{genes::Gene, terms::Term, GeneOntology};
+mod rolemodel;
+mod unsafe_rolemodel;
