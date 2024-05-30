@@ -36,3 +36,4 @@ pub trait Whole {
 mod gene_ontology;
 pub use gene_ontology::{genes::Gene, terms::Term, GeneOntology};
 mod rolemodel;
+mod unsafe_rolemodel;
