@@ -7,3 +7,9 @@ edition = "2021"
 
 [dependencies]
 rv = "*"
+csv = "*"
+serde = "*"
+itertools = "*"
+hashbrown = "*"
+rand = "*"
+libarena = "*"

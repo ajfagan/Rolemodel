@@ -1,3 +1,7 @@
+use rv::data::Booleable;
+
+use crate::Activeable;
+
 pub trait Saveable {
     type Output;
 
@@ -6,16 +10,8 @@ pub trait Saveable {
     fn current(&self) -> Self::Output;
     fn saved(&self) -> Self::Output;
 }
-pub trait RcSaveable {
-    type T;
 
-    fn save(self);
-    fn restore(self);
-    fn current(self) -> Self::T;
-    fn saved(self) -> Self::T;
-}
-
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, Default)]
 pub struct SaveableData<T>
 where T: Copy {
     current: T,
@@ -23,7 +19,7 @@ where T: Copy {
 }
 impl<T> SaveableData<T> 
 where T: Copy {
-    fn new(current: T, saved: T) -> Self {
+    pub fn new(current: T, saved: T) -> Self {
         Self {
             current,
             saved,
@@ -35,16 +31,33 @@ where T: Copy {
     type Output = T;
 
     fn save(&mut self) {
-        self.saved = self.current.clone();
+        self.saved = self.current;
     }
     fn restore(&mut self) {
-        self.current = self.saved.clone();
+        self.current = self.saved;
     }
     fn current(&self) -> Self::Output {
         self.current
     }
     fn saved(&self) -> Self::Output {
         self.saved
+    }
+}
+impl<T> Activeable for SaveableData<T>
+where
+    T: Copy + Booleable
+{
+    fn is_active(&self) -> bool {
+        self.current().into_bool()
+    }
+
+    fn set_activity(&mut self, b: bool) {
+        self.save();
+        self.current = T::from_bool(b);
+    }
+
+    fn is_legal(&self) -> bool {
+        true
     }
 }
 
