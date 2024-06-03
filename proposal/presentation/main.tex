@@ -1,0 +1,182 @@
+\documentclass{beamer}
+
+\title{Regression Methods for GSEA}
+\date{\today}
+\author{AJ Fagan}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+  \frametitle{Gene Set Enrichment Analysis}
+  Goal: from some gene-level data, determine which of some gene sets are of interest in the present data
+\end{frame}
+
+\begin{frame}
+  \frametitle{GSEA in DE Analysis}
+
+  \begin{itemize}
+    \item DE output: list of scores for each gene (insert example here)
+    \item Fed as input into GSEA methods 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Permutation Methods}
+  \begin{itemize}
+    \item Construct binary scores for each gene
+    \item Determine, for each gene set, if it is enriched for 1's compared to a random set of the same size, or to the remaining genes
+    \item Simplest example is Fisher's Exact Test to see if a score of 1 is associated with inclusion in each gene set 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problem - Gene Set Overlap}
+
+  Many gene sets, such as those from the Gene Ontology (GO), have considerable overlap.
+  As a result, methods like those above will often return hundreds of highly correlated gene sets.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Solution - Multiset Methods}
+
+  Instead of considering only one gene set at a time, methods like SetRank and the Rolemodel consider every gene set when determining significance of any other.
+  This enables overlap to be addressed, reducing the sizes of generated lists substantially.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problem - Gene-Gene Correlation}
+
+  Another problem with permutation-based methods is that they fail to account for inter-gene correlation.
+  As an example, if a gene set has 5 perfectly correlated genes found as hits, and 5 uncorrelated genes found as misses, this set should be treated closer to 1/6, then 5/10.
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Solution - Multivariate Regression Methods}
+
+  Methods such as ROAST utilize multivariate regression techniques to account for inter-gene correlation.
+  These methods cannot operate solely on gene-level output of some pre-existing DE analysis, as such data would lose all inter-gene information. 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proposed Work}
+
+  As far as I can find, no method currently exists that enables multiset, multivariate regression techniques that can adequately account for both the inter-gene correlation, and the gene set-overlap problem. 
+  Such a method would permit both multiset methods' cleanliness of returned gene sets, as well as the robustness to inter-gene correlation offered by the multivariate regression methodology. 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Data Model}
+  Let $g = 1,\ldots G$ denote the genes present in our analysis, and let $s = 1, \ldots S$ denote the gene sets.
+  We model, for $i = 1, \ldots n$:
+  \[
+    y_{i} = X_i\alpha + Z_i\beta + \varepsilon_i,
+  \]
+  where
+  \begin{itemize}
+    \item $y_i$ is the length $G$ vector of gene expression data for sample $i$
+    \item $X_i$ is the size $G\times k_0$ design matrix for sample $i$ under the null of non-differential expression
+    \item $Z_i$ is the size $G\times k_A$ design matrix for sample $i$ under the alternative of differential expression
+    \item and $\varepsilon_i$ is an error term.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Rolemodel}
+
+  For each gene $g$, let $A_g \in \{0, 1\}$ denote that gene's ``activity''.
+
+  Similarly, for each gene set $s$, let $T_s \in \{0,1\}$ denote that gene set's ``activity''.
+
+  \vfill
+
+  The Rolemodel asserts that, for each gene $g$, \[A_g = 1 \iff \exists s, g\in s, T_s = 1.\]
+  Traditionally, it operates on a set of observed gene-level binary responses $\hat A_g$, informing the likelihood of $P(\hat A_g | A_g)$, forcing \[P(\hat A_g | A_g = 1) > P(\hat A_g | A_g = 0).\]
+  From this, it constructs the posterior probability that $T_s = 1$ for each gene set $s$.
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Rolemodel - Expanded}
+  To extend the Rolemodel to function in the multivariate regression context, we simply alter the role of $A_g$ in the model.
+  Here, we use the latent $A_g$ to inform the prior on $\beta_g$: 
+  \[
+    \beta_g \sim (1 - A_g) F_0(\beta_g | \lambda_0 ) + A_g F_1(\beta_g | \lambda_1 ),
+  \]
+  where $F_0(\beta_g | \lambda_0)$ is a null distribution, and $F_1(\beta_g | \lambda_0)$ is a distribution indicative of DE. 
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example - Atovaquone vs DMSO}
+  Design - three batches ($j = 1,2,3$), each containing: 
+  \begin{itemize}
+    \item Three times ($t = 1, 8, 24$ hours)
+    \item 3 treatments ($i =$ DMSO, IC50, IC75)
+    \item 3 replicates ($k = 1,2,3$)
+  \end{itemize}
+  Goal: 
+  \begin{center} Explain DE in terms of GO functions. \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example (cont'd)}
+  Let 
+  \[
+    y_{itjk} = \mu + \alpha_{j} + \gamma_{t} + \beta_{i} + (\gamma\beta)_{it} + \varepsilon_{itjk}, 
+  \]
+  where 
+  \begin{itemize}
+    \item $\alpha_j$ indicates the batch mean for each gene,
+    \item $\gamma_t$ indicates the (discrete) time effect on each gene,
+    \item $\beta_i$ indicates the treatment effect on each gene, and 
+    \item $(\gamma\beta)_{it}$ indicates the time-treatment combination effect on each gene.
+  \end{itemize}
+
+  Then, under the null of non-DE, for each $i$ and $t$,
+  \[
+    \beta_i = (\gamma\beta)_{it} = 0.
+  \]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example - Data Likelihood}
+  At this point, DE models such as DESeq2 or multiset GSEA models such as (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3954234/#R2) employ some discrete data distribution (negative binomial and non-central hypergeometric, respectively) to model $y_{itjk}$.
+  \vfill
+  However, such discrete distributions are unable to account for the covariance structure of the gene expression. 
+  Therefore, we employ log normalized-counts as our dependent variable, and model,
+  \[
+    y_{itjk} - \hat y_{itjk} = \varepsilon_{itjk} \sim N(0, \Sigma).
+  \]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example - Priors}
+  We model priors for our coefficients as 
+  \begin{align*}
+    \mu &\sim 1,\\
+    \alpha_j &\sim N(0, \sigma_{batch}^2I),\\ 
+    \gamma_t &\sim N(0, \sigma_{time}^2I),\\ 
+    \beta_i | A &\sim (1 - A)\times I(\beta = 0) + A \times N(0, \sigma_{treat}^2I), \\ 
+    (\gamma\beta)_{it} &\sim (1 - A) \times I(\beta = 0) + A \times N(0, \sigma_{interact}^2I),
+  \end{align*}
+  and each $\sigma_\cdot^2\sim IG(0.001, 0.001)$.
+  \vfill
+  However, the prior for $\Sigma$ is a bit more tricky. 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example - Prior Variance}
+  The human genome contains approximately 20\_000 genes. 
+  Therefore, $\Sigma$ would be approximately $20\_000\times 20\_000$. 
+  Assuming $\Sigma$ was populated with 64-bit floating point numbers, this matrix would occupy 3.2GB worth of RAM. 
+
+\end{frame}
+
+\end{document}
