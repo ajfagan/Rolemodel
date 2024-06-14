@@ -1,0 +1,9 @@
+/mnt/hdd/AJNewton/Rolemodel/code-tests/big-inv/target/debug/deps/libapprox-faae747cc325e717.rmeta: /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/lib.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/abs_diff_eq.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/relative_eq.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/ulps_eq.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/macros.rs
+
+/mnt/hdd/AJNewton/Rolemodel/code-tests/big-inv/target/debug/deps/approx-faae747cc325e717.d: /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/lib.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/abs_diff_eq.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/relative_eq.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/ulps_eq.rs /home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/macros.rs
+
+/home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/lib.rs:
+/home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/abs_diff_eq.rs:
+/home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/relative_eq.rs:
+/home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/ulps_eq.rs:
+/home/aj/.cargo/registry/src/index.crates.io-6f17d22bba15001f/approx-0.5.1/src/macros.rs:

@@ -22,12 +22,9 @@ use rand::Rng;
 pub trait GeneListRolemodel: GeneSet
 where 
     <Self as GeneSet>::PartNode: Part,
-    <<Self as GeneSet>::PartNode as Node>::Data: Activeable + Booleable,
-    <<Self as GeneSet>::PartNode as Node>::NeighborType: Whole,
-    <<<Self as GeneSet>::PartNode as Node>::NeighborType as Node>::Data: Activeable,
+    <<Self as GeneSet>::PartNode as Node>::Data: Activeable + Booleable + Copy,
     <Self as GeneSet>::WholeNode: Whole,
-    <<Self as GeneSet>::WholeNode as Node>::Data: Activeable,
-    <<<Self as GeneSet>::WholeNode as Node>::NeighborType as Node>::Data: Activeable,
+    <<Self as GeneSet>::WholeNode as Node>::Data: Activeable + Copy,
 {
     fn burn_in(&self) -> usize;
     fn nsamples(&self) -> usize;
@@ -60,7 +57,7 @@ where
         self.iter_parts()
             .map(|part| {
                 let activity = part.is_active();
-                match (activity, part.data().try_into_bool().expect("Data should be binary 0/1")) {
+                match (activity, part.data().get().try_into_bool().expect("Data should be binary 0/1")) {
                     (true, true) => self.true_active_gene_hit_rate().ln(),
                     (true, false) => (1.0 - self.true_active_gene_hit_rate()).ln(),
                     (false, true) => self.false_inactive_gene_hit_rate().ln(),
@@ -76,12 +73,9 @@ impl<G> Rolemodel for G
 where 
     G: GeneListRolemodel + Saveable,
     <G as GeneSet>::PartNode: Part,
-    <<G as GeneSet>::PartNode as Node>::Data: Booleable + Activeable,
-    <<G as GeneSet>::PartNode as Node>::NeighborType: Whole,
-    <<<G as GeneSet>::PartNode as Node>::NeighborType as Node>::Data: Activeable,
+    <<G as GeneSet>::PartNode as Node>::Data: Booleable + Activeable + Copy,
     <G as GeneSet>::WholeNode: Whole,
-    <<G as GeneSet>::WholeNode as Node>::Data: Activeable,
-    <<<Self as GeneSet>::WholeNode as Node>::NeighborType as Node>::Data: Activeable,
+    <<G as GeneSet>::WholeNode as Node>::Data: Activeable + Copy,
 {
 
 

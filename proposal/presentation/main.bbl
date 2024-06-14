@@ -1,0 +1,23 @@
+\begin{thebibliography}{}
+
+\bibitem[Alexeyenko et~al., 2012]{Alexeyenko-2012-networkGSEA}
+Alexeyenko, A., Lee, W., Pernemalm, M., Guegan, J., Dessen, P., Lazar, V., Lehti{\"o}, J., and Pawitan, Y. (2012).
+\newblock Network enrichment analysis: extension of gene-set enrichment analysis to gene networks.
+\newblock {\em BMC Bioinformatics}, 13(1):226.
+
+\bibitem[Cao and Zhang, 2013]{Cao-2013-hypergeom}
+Cao, J. and Zhang, S. (2013).
+\newblock A bayesian extension of the hypergeometric test for functional enrichment analysis.
+\newblock {\em Biometrics}, 70(1):84--94.
+
+\bibitem[Fang et~al., 2021]{Fang-2021-GRNdb}
+Fang, L., Li, Y., Ma, L., Xu, Q., Tan, F., and Chen, G. (2021).
+\newblock {GRNdb}: decoding the gene regulatory networks in diverse human and mouse conditions.
+\newblock {\em Nucleic Acids Res}, 49(D1):D97--D103.
+
+\bibitem[Wang et~al., 2024]{Wang-2024-GINtool}
+Wang, B., van~der Kloet, F., Kes, M. B. M.~J., Luirink, J., and Hamoen, L.~W. (2024).
+\newblock Improving gene set enrichment analysis ({GSEA}) by using regulation directionality.
+\newblock {\em Microbiol Spectr}, 12(3):e0345623.
+
+\end{thebibliography}

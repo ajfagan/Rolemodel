@@ -1,0 +1,21 @@
+\documentclass{beamer}
+
+\begin{document}
+
+\begin{frame}
+  \frametitle{Gaussian Graphical Models}
+  Let $\mathcal G := (V, E)$ be a graph consisting of 
+  \begin{itemize}
+    \item vertices $V := v_1, \ldots v_n$, and 
+    \item edges $E := e_1, \ldots e_k$.
+  \end{itemize}
+  We can also represent $G$ as an adjacency matrix $\mathcal A := (a_{ij})_{i,j  = 1}^n$.
+  \vfill 
+  In a \alert{Gaussian Graphical Model} (GGM), each node $v_i$ is then associated with a random variable $x_i$, and the assumption is made that 
+  \[
+    X := (x_1, \ldots x_n)' \sim \mathcal N(\mu, \Sigma),
+  \]
+  where, for $i\ne j$, $\mathcal A_{ij} = 0 \implies (\Sigma)_{ij} = 0$.
+\end{frame}
+
+\end{document}

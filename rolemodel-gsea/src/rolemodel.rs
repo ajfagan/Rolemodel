@@ -2,8 +2,6 @@ pub mod genelist;
 pub mod saveable;
 pub mod activeable;
 
-use crate::{Activeable, Part, Whole};
-
 
 
 pub trait Rolemodel {

@@ -1,0 +1,335 @@
+% Rolemodel
+@article{Wang-2015-MFA,
+   title={A multi-functional analyzer uses parameter constraints to improve the efficiency of model-based gene-set analysis},
+   volume={9},
+   ISSN={1932-6157},
+   url={http://dx.doi.org/10.1214/14-AOAS777},
+   DOI={10.1214/14-aoas777},
+   number={1},
+   journal={The Annals of Applied Statistics},
+   publisher={Institute of Mathematical Statistics},
+   author={Wang, Zhishi and He, Qiuling and Larget, Bret and Newton, Michael A.},
+   year={2015},
+   month=mar 
+}
+
+% Allez
+@article{Newton-2007-Allez,
+   title={Random-set methods identify distinct aspects of the enrichment signal in gene-set analysis},
+   volume={1},
+   ISSN={1932-6157},
+   url={http://dx.doi.org/10.1214/07-AOAS104},
+   DOI={10.1214/07-aoas104},
+   number={1},
+   journal={The Annals of Applied Statistics},
+   publisher={Institute of Mathematical Statistics},
+   author={Newton, Michael A. and Quintana, Fernando A. and den Boon, Johan A. and Sengupta, Srikumar and Ahlquist, Paul},
+   year={2007},
+   month=jun 
+}
+
+
+% GSEA
+@Article{Mootha-2003-GSEA,
+   author={Mootha, Vamsi K.
+   and Lindgren, Cecilia M.
+   and Eriksson, Karl-Fredrik
+   and Subramanian, Aravind
+   and Sihag, Smita
+   and Lehar, Joseph
+   and Puigserver, Pere
+   and Carlsson, Emma
+   and Ridderstr{\aa}le, Martin
+   and Laurila, Esa
+   and Houstis, Nicholas
+   and Daly, Mark J.
+   and Patterson, Nick
+   and Mesirov, Jill P.
+   and Golub, Todd R.
+   and Tamayo, Pablo
+   and Spiegelman, Bruce
+   and Lander, Eric S.
+   and Hirschhorn, Joel N.
+   and Altshuler, David
+   and Groop, Leif C.},
+   title={PGC-1$\alpha$-responsive genes involved in oxidative phosphorylation are coordinately downregulated in human diabetes},
+   journal={Nature Genetics},
+   year={2003},
+   month={Jul},
+   day={01},
+   volume={34},
+   number={3},
+   pages={267-273},
+   abstract={DNA microarrays can be used to identify gene expression changes characteristic of human disease. This is challenging, however, when relevant differences are subtle at the level of individual genes. We introduce an analytical strategy, Gene Set Enrichment Analysis, designed to detect modest but coordinate changes in the expression of groups of functionally related genes. Using this approach, we identify a set of genes involved in oxidative phosphorylation whose expression is coordinately decreased in human diabetic muscle. Expression of these genes is high at sites of insulin-mediated glucose disposal, activated by PGC-1$\alpha$ and correlated with total-body aerobic capacity. Our results associate this gene set with clinically important variation in human metabolism and illustrate the value of pathway relationships in the analysis of genomic profiling experiments.},
+   issn={1546-1718},
+   doi={10.1038/ng1180},
+   url={https://doi.org/10.1038/ng1180}
+}
+
+% ROAST
+@article{Wu-2010-ROAST,
+    author = {Wu, Di and Lim, Elgene and Vaillant, François and Asselin-Labat, Marie-Liesse and Visvader, Jane E. and Smyth, Gordon K.},
+    title = "{ROAST: rotation gene set tests for complex microarray experiments}",
+    journal = {Bioinformatics},
+    volume = {26},
+    number = {17},
+    pages = {2176-2182},
+    year = {2010},
+    month = {07},
+    abstract = "{Motivation: A gene set test is a differential expression analysis in which a P-value is assigned to a set of genes as a unit. Gene set tests are valuable for increasing statistical power, organizing and interpreting results and for relating expression patterns across different experiments. Existing methods are based on permutation. Methods that rely on permutation of probes unrealistically assume independence of genes, while those that rely on permutation of sample are suitable only for two-group comparisons with a good number of replicates in each group.Results: We present ROAST, a statistically rigorous gene set test that allows for gene-wise correlation while being applicable to almost any experimental design. Instead of permutation, ROAST uses rotation, a Monte Carlo technology for multivariate regression. Since the number of rotations does not depend on sample size, ROAST gives useful results even for experiments with minimal replication. ROAST allows for any experimental design that can be expressed as a linear model, and can also incorporate array weights and correlated samples. ROAST can be tuned for situations in which only a subset of the genes in the set are actively involved in the molecular pathway. ROAST can test for uni- or bi-direction regulation. Probes can also be weighted to allow for prior importance. The power and size of the ROAST procedure is demonstrated in a simulation study, and compared to that of a representative permutation method. Finally, ROAST is used to test the degree of transcriptional conservation between human and mouse mammary stems.Availability: ROAST is implemented as a function in the Bioconductor package limma available from www.bioconductor.orgContact:  smyth@wehi.edu.auSupplementary information:  Supplementary data are available at Bioinformatics online.}",
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btq401},
+    url = {https://doi.org/10.1093/bioinformatics/btq401},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/26/17/2176/48853780/bioinformatics\_26\_17\_2176.pdf},
+}
+
+% Camera
+@ARTICLE{Wu-2012-Camera,
+  title    = "Camera: a competitive gene set test accounting for inter-gene
+              correlation",
+  author   = "Wu, Di and Smyth, Gordon K",
+  abstract = "Competitive gene set tests are commonly used in molecular pathway
+              analysis to test for enrichment of a particular gene annotation
+              category amongst the differential expression results from a
+              microarray experiment. Existing gene set tests that rely on gene
+              permutation are shown here to be extremely sensitive to
+              inter-gene correlation. Several data sets are analyzed to show
+              that inter-gene correlation is non-ignorable even for experiments
+              on homogeneous cell populations using genetically identical model
+              organisms. A new gene set test procedure (CAMERA) is proposed
+              based on the idea of estimating the inter-gene correlation from
+              the data, and using it to adjust the gene set test statistic. An
+              efficient procedure is developed for estimating the inter-gene
+              correlation and characterizing its precision. CAMERA is shown to
+              control the type I error rate correctly regardless of inter-gene
+              correlations, yet retains excellent power for detecting genuine
+              differential expression. Analysis of breast cancer data shows
+              that CAMERA recovers known relationships between tumor subtypes
+              in very convincing terms. CAMERA can be used to analyze specified
+              sets or as a pathway analysis tool using a database of molecular
+              signatures.",
+  journal  = "Nucleic Acids Res",
+  volume   =  40,
+  number   =  17,
+  pages    = "e133",
+  month    =  may,
+  year     =  2012,
+  address  = "England",
+  language = "en"
+}
+
+% SetRank
+@Article{Simillion-2017-SetRank,
+   author={Simillion, Cedric
+   and Liechti, Robin
+   and Lischer, Heidi E.L.
+   and Ioannidis, Vassilios
+   and Bruggmann, R{\'e}my},
+   title={Avoiding the pitfalls of gene set enrichment analysis with SetRank},
+   journal={BMC Bioinformatics},
+   year={2017},
+   month={Mar},
+   day={04},
+   volume={18},
+   number={1},
+   pages={151},
+   abstract={The purpose of gene set enrichment analysis (GSEA) is to find general trends in the huge lists of genes or proteins generated by many functional genomics techniques and bioinformatics analyses.},
+   issn={1471-2105},
+   doi={10.1186/s12859-017-1571-6},
+   url={https://doi.org/10.1186/s12859-017-1571-6}
+}
+
+% MGSEA
+@Article{Tiong-2019-MGSEA,
+   author={Tiong, Khong-Loon
+   and Yeang, Chen-Hsiang},
+   title={MGSEA -- a multivariate Gene set enrichment analysis},
+   journal={BMC Bioinformatics},
+   year={2019},
+   month={Mar},
+   day={18},
+   volume={20},
+   number={1},
+   pages={145},
+   abstract={Gene Set Enrichment Analysis (GSEA) is a powerful tool to identify enriched functional categories of informative biomarkers. Canonical GSEA takes one-dimensional feature scores derived from the data of one platform as inputs. Numerous extensions of GSEA handling multimodal OMIC data are proposed, yet none of them explicitly captures combinatorial relations of feature scores from multiple platforms.},
+   issn={1471-2105},
+   doi={10.1186/s12859-019-2716-6},
+   url={https://doi.org/10.1186/s12859-019-2716-6}
+}
+
+  % GRNdb
+@Article{Fang-2021-GRNdb,
+  title    = "{GRNdb}: decoding the gene regulatory networks in diverse human
+              and mouse conditions",
+  author   = "Fang, Li and Li, Yunjin and Ma, Lu and Xu, Qiyue and Tan, Fei and
+              Chen, Geng",
+  abstract = "Gene regulatory networks (GRNs) formed by transcription factors
+              (TFs) and their downstream target genes play essential roles in
+              gene expression regulation. Moreover, GRNs can be dynamic
+              changing across different conditions, which are crucial for
+              understanding the underlying mechanisms of disease pathogenesis.
+              However, no existing database provides comprehensive GRN
+              information for various human and mouse normal tissues and
+              diseases at the single-cell level. Based on the known TF-target
+              relationships and the large-scale single-cell RNA-seq data
+              collected from public databases as well as the bulk data of The
+              Cancer Genome Atlas and the Genotype-Tissue Expression project,
+              we systematically predicted the GRNs of 184 different
+              physiological and pathological conditions of human and mouse
+              involving >633 000 cells and >27 700 bulk samples. We further
+              developed GRNdb, a freely accessible and user-friendly database
+              (http://www.grndb.com/) for searching, comparing, browsing,
+              visualizing, and downloading the predicted information of 77 746
+              GRNs, 19 687 841 TF-target pairs, and related binding motifs at
+              single-cell/bulk resolution. GRNdb also allows users to explore
+              the gene expression profile, correlations, and the associations
+              between expression levels and the patient survival of diverse
+              cancers. Overall, GRNdb provides a valuable and timely resource
+              to the scientific community to elucidate the functions and
+              mechanisms of gene expression regulation in various conditions.",
+  journal  = "Nucleic Acids Res",
+  volume   =  49,
+  number   = "D1",
+  pages    = "D97--D103",
+  month    =  jan,
+  year     =  2021,
+  address  = "England",
+  language = "en"
+}
+
+
+@ARTICLE{Wang-2024-GINtool,
+  title    = "Improving gene set enrichment analysis ({GSEA}) by using
+              regulation directionality",
+  author   = "Wang, Biwen and van der Kloet, Frans and Kes, Mariah B M J and
+              Luirink, Joen and Hamoen, Leendert W",
+  abstract = "To infer the biological meaning from transcriptome data, it is
+              useful to focus on genes that are regulated by the same
+              regulator, i.e., regulons. Unfortunately, current gene set
+              enrichment analysis (GSEA) tools do not consider whether a gene
+              is activated or repressed by a regulator. This distinction is
+              crucial when analyzing regulons since a regulator can work as an
+              activator of certain genes and as a repressor of other genes, yet
+              both sets of genes belong to the same regulon. Therefore, simply
+              averaging expression differences of the genes of such a regulon
+              will not properly reflect the activity of the regulator. What
+              makes it more complicated is the fact that many genes are
+              regulated by different transcription factors, and current
+              transcriptome analysis tools are unable to indicate which
+              regulator is most likely responsible for the observed expression
+              difference of a gene. To address these challenges, we developed
+              the gene set enrichment analysis program GINtool. Additional
+              features of GINtool are novel graphical representations to
+              facilitate the visualization of gene set analyses of
+              transcriptome data, the possibility to include functional
+              categories as gene sets for analysis, and the option to analyze
+              expression differences within operons, which is useful when
+              analyzing prokaryotic transcriptome and also proteome
+              data.IMPORTANCEMeasuring the activity of all genes in cells is a
+              common way to elucidate the function and regulation of genes.
+              These transcriptome analyses produce large amounts of data since
+              genomes contain thousands of genes. The analysis of these large
+              data sets is challenging. Therefore, we developed a new software
+              tool called GINtool that can facilitate the analysis of
+              transcriptome data by using prior knowledge of gene sets
+              controlled by the same regulator, the so-called regulons. An
+              important novelty of GINtool is that it can take into account the
+              directionality of gene regulation in these analyses, i.e.,
+              whether a gene is activated or repressed, which is crucial to
+              assess whether a regulon or functional category is affected.
+              GINtool also includes new graphical methods to facilitate the
+              visual inspection of regulation events in transcriptome data
+              sets. These and additional analysis methods included in GINtool
+              make it a powerful software tool to analyze transcriptome data.",
+  journal  = "Microbiol Spectr",
+  volume   =  12,
+  number   =  3,
+  pages    = "e0345623",
+  month    =  jan,
+  year     =  2024,
+  address  = "United States",
+  keywords = "Bacillus subtilis; GSEA; functional categories; operons;
+              regulons; transcriptome analysis",
+  language = "en"
+}
+
+
+@ARTICLE{Cao-2013-hypergeom,
+  title    = "A Bayesian extension of the hypergeometric test for functional
+              enrichment analysis",
+  author   = "Cao, Jing and Zhang, Song",
+  abstract = "Functional enrichment analysis is conducted on high-throughput
+              data to provide functional interpretation for a list of genes or
+              proteins that share a common property, such as being
+              differentially expressed (DE). The hypergeometric P-value has
+              been widely used to investigate whether genes from pre-defined
+              functional terms, for example, Gene Ontology (GO), are enriched
+              in the DE genes. The hypergeometric P-value has three
+              limitations: (1) computed independently for each term, thus
+              neglecting biological dependence; (2) subject to a size
+              constraint that leads to the tendency of selecting less-specific
+              terms; (3) repeated use of information due to overlapping
+              annotations by the true-path rule. We propose a Bayesian approach
+              based on the non-central hypergeometric model. The GO dependence
+              structure is incorporated through a prior on non-centrality
+              parameters. The likelihood function does not include overlapping
+              information. The inference about enrichment is based on posterior
+              probabilities that do not have a size constraint. This method can
+              detect moderate but consistent enrichment signals and identify
+              sets of closely related and biologically meaningful functional
+              terms rather than isolated terms. We also describe the basic
+              ideas of assumption and implementation of different methods to
+              provide some theoretical insights, which are demonstrated via a
+              simulation study. A real application is presented.",
+  journal  = "Biometrics",
+  volume   =  70,
+  number   =  1,
+  pages    = "84--94",
+  month    =  dec,
+  year     =  2013,
+  address  = "England",
+  keywords = "Functional enrichment analysis; Gene ontology; Hypergeometric
+              P-value; Modular enrichment analysis; Non-central hypergeometric
+              distribution",
+  language = "en"
+}
+
+
+@ARTICLE{Alexeyenko-2012-networkGSEA,
+  title    = "Network enrichment analysis: extension of gene-set enrichment
+              analysis to gene networks",
+  author   = "Alexeyenko, Andrey and Lee, Woojoo and Pernemalm, Maria and
+              Guegan, Justin and Dessen, Philippe and Lazar, Vladimir and
+              Lehti{\"o}, Janne and Pawitan, Yudi",
+  abstract = "Gene-set enrichment analyses (GEA or GSEA) are commonly used for
+              biological characterization of an experimental gene-set. This is
+              done by finding known functional categories, such as pathways or
+              Gene Ontology terms, that are over-represented in the
+              experimental set; the assessment is based on an overlap
+              statistic. Rich biological information in terms of gene
+              interaction network is now widely available, but this topological
+              information is not used by GEA, so there is a need for methods
+              that exploit this type of information in high-throughput data
+              analysis.",
+  journal  = "BMC Bioinformatics",
+  volume   =  13,
+  number   =  1,
+  pages    = "226",
+  month    =  sep,
+  year     =  2012
+}
+
+
+@article{WangCarvalho-2010-HIW, 
+  author = {Hao Wang and Carlos M. Carvalho},
+  title = {{Simulation of hyper-inverse Wishart distributions for non-decomposable graphs}},
+  volume = {4},
+  journal = {Electronic Journal of Statistics},
+  number = {none},
+  publisher = {Institute of Mathematical Statistics and Bernoulli Society},
+  pages = {1470 -- 1475},
+  keywords = {Hyper-inverse Wishart, junction trees, non-decomposable graphs, posterior simulation},
+  year = {2010},
+  doi = {10.1214/10-EJS591},
+  URL = {https://doi.org/10.1214/10-EJS591}
+}

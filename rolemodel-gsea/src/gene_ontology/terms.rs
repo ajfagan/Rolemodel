@@ -1,111 +1,81 @@
 use crate::{
-    gene_ontology::genes::Gene, rolemodel::saveable::Saveable, Activeable, Part, Whole, Node,
+    rolemodel::saveable::Saveable, Whole, Node,
 };
 
-use std::{
-    cell::{
-        Ref,
-        RefCell
-    },
-    rc::Rc,
-    ops::Deref,
-};
+use std::cell::Cell;
 
 #[derive(Debug)]
-pub struct Term<Td, Gd> {
-    data: Td,
-    genes: Vec<Rc<RefCell<Gene<Td, Gd>>>>,
+pub struct Term<Id, Td> 
+where
+    Td: Copy
+{
+    id: Id,
+    data: Cell<Td>,
+    genes: Vec<usize>,
 }
 
-impl<Td, Gd> Node for Term<Td, Gd> {
+impl<Id, Td> Node for Term<Id, Td> 
+where 
+    Td: Copy
+{
+    type Id = Id;
     type Data = Td;
-    type NeighborType = Rc<RefCell<Gene<Td, Gd>>>;
 
-    fn data(&self) -> &Self::Data {
+    fn id(&self) -> &Self::Id {
+        &self.id
+    }
+    fn data(&self) -> &Cell<Self::Data> {
         &self.data
     }
-    fn data_mut(&mut self) -> &mut Self::Data {
+    fn data_mut(&mut self) -> &mut Cell<Self::Data> {
         &mut self.data
     }
-    fn ref_data(&self) -> Ref<Self::Data> {
-        panic!("Never call ref_data on items not in a RefCell - call data instead");
-    }
-    fn iter_neighbors(&self) -> impl Iterator<Item = Self::NeighborType> {
-        self.genes.clone().into_iter()
-    }
-}
-
-impl<Td, Gd> Node for Rc<RefCell<Term<Td, Gd>>> {
-    type Data = Td;
-    type NeighborType = Rc<RefCell<Gene<Td, Gd>>>;
-
-    fn data(&self) -> &Self::Data {
-        panic!("Cannot borrow data from inside a RefCell - use ref_data instead")
-    }
-    fn data_mut(&mut self) -> &mut Self::Data {
-        panic!("Cannot borrow data from inside a RefCell - use ref_data_mut instead")
-    }
-    fn ref_data(&self) -> Ref<Self::Data> {
-        Ref::map(self.borrow(), |whole| &whole.data)
-    }
     
-    fn iter_neighbors(&self) -> impl Iterator<Item = Self::NeighborType> {
-        self.borrow().genes.clone().into_iter()
+    fn idx_neighbors(&self) -> &Vec<usize> {
+        &self.genes
     }
 }
 
-impl<Td, Gd> Term<Td, Gd> {
-    pub fn new(data: Td, genes: Vec<Rc<RefCell<Gene<Td, Gd>>>>) -> Self {
+impl<Id, Td> Term<Id, Td> 
+where 
+    Td: Copy
+{
+    pub fn new(id: Id, data: Td, genes: Vec<usize>) -> Self {
         Self {
-            data,
+            id,
+            data: Cell::new(data),
             genes,
         }
     }
-    pub fn add_gene(&mut self, gene: Rc<RefCell<Gene<Td, Gd>>>) {
+    pub fn add_gene(&mut self, gene: usize) {
         self.genes.push(gene);
     }
+    pub fn genes(&self) -> &Vec<usize> {
+        &self.genes
+    }
 }
 
-impl<Td, Gd> Whole for Term<Td, Gd> { }
+impl<Id, Td> Whole for Term<Id, Td> 
+where
+    Td: Copy
+{ }
 
-impl<Td, Gd> Saveable for Term<Td, Gd> 
+impl<Id, Td> Saveable for Term<Id, Td> 
 where 
-    Td: Saveable,
+    Td: Saveable + Copy,
 {
     type Output = Td::Output;
 
     fn save(&mut self) {
-        self.data.save();
+        self.data.get_mut().save();
     }
     fn restore(&mut self) {
-        self.data.restore();
+        self.data.get_mut().restore();
     }
     fn current(&self) -> Self::Output {
-        self.data.current()
+        self.data.get().current()
     }
     fn saved(&self) -> Self::Output {
-        self.data.saved()
-    }
-}
-
-impl<Td, Gd> Whole for Rc<RefCell<Term<Td, Gd>>> { }
-
-impl<Td, Gd> Saveable for Rc<RefCell<Term<Td, Gd>>> 
-where 
-    Td: Saveable,
-{
-    type Output = Td::Output;
-
-    fn save(&mut self) {
-        (self.borrow_mut().data.save());
-    }
-    fn restore(&mut self) {
-        self.borrow_mut().data.restore();
-    }
-    fn current(&self) -> Self::Output {
-        self.data().current()
-    }
-    fn saved(&self) -> Self::Output {
-        self.data().saved()
+        self.data.get().saved()
     }
 }

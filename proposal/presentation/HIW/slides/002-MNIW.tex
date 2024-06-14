@@ -1,0 +1,20 @@
+%\documentclass{beamer}
+
+%\begin{document}
+
+\begin{frame}
+  \frametitle{Inverse-Wishart --- Normal Conjugacy}
+  Suppose $\mathcal G$ is saturated, i.e. $a_{ij} = 1$ for all $i,j$. 
+  Then, if $(\mathbf B, \mathbf \Sigma) \sim MNIW_{n,G}(\mathbf B_0, \mathbf \Lambda_0, \mathbf \Sigma_0, \nu)$, the \alert{Matrix Normal-Inverse-Wishart Distribution}, then
+  \[
+    (\mathbf B, \mathbf \Sigma) | \mathbf X, \mathbf Y \sim MNIW_{n,G}(\mathbf B_n, \mathbf \Lambda_n, \mathbf \Sigma_n, \nu + n),
+  \]
+  where 
+  \begin{itemize}
+    \item $\mathbf \Sigma_n = \mathbf \Sigma_0 + (\mathbf Y - \mathbf X\mathbf B_n)'(\mathbf Y-\mathbf X\mathbf B_n) + (\mathbf B_n - \mathbf B_0)'\mathbf \Lambda_0(\mathbf B_n - \mathbf B_0)$
+    \item $\mathbf B_n = (\mathbf X'\mathbf X + \mathbf \Lambda_0)^{-1}(\mathbf X'\mathbf Y + \mathbf \Lambda_0\mathbf B_0)$
+    \item $\mathbf \Lambda_n = \mathbf X'\mathbf X + \mathbf \Lambda_0$
+  \end{itemize}
+\end{frame} 
+
+%\end{document}

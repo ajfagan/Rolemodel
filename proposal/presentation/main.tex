@@ -1,11 +1,17 @@
 \documentclass{beamer}
 
+
 \title{Regression Methods for GSEA}
 \date{\today}
 \author{AJ Fagan}
 
+
 \usetheme{Madrid}
 \usecolortheme{beaver}
+
+\newcommand{\SubItem}[1] {
+  {\setlength\itemindent{15pt} \item[-] $1}
+}
 
 
 \begin{document}
@@ -18,7 +24,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{GSEA in DE Analysis}
+  \frametitle{GSEA in DE Analysis} 
 
   \begin{itemize}
     \item DE output: list of scores for each gene (insert example here)
@@ -32,8 +38,8 @@
     \item Construct binary scores for each gene
     \item Determine, for each gene set, if it is enriched for 1's compared to a random set of the same size, or to the remaining genes
     \item Simplest example is Fisher's Exact Test to see if a score of 1 is associated with inclusion in each gene set 
-  \end{itemize}
-\end{frame}
+  \end{itemize} 
+\end{frame} 
 
 \begin{frame}
   \frametitle{Problem - Gene Set Overlap}
@@ -147,36 +153,105 @@
 
 \begin{frame}
   \frametitle{Example - Data Likelihood}
-  At this point, DE models such as DESeq2 or multiset GSEA models such as (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3954234/#R2) employ some discrete data distribution (negative binomial and non-central hypergeometric, respectively) to model $y_{itjk}$.
+  At this point, DE models such as DESeq2 or multiset GSEA models such as~\cite{Cao-2013-hypergeom} employ some discrete data distribution (negative binomial and non-central hypergeometric, respectively) to model $y_{itjk}$.
   \vfill
   However, such discrete distributions are unable to account for the covariance structure of the gene expression. 
   Therefore, we employ log normalized-counts as our dependent variable, and model,
   \[
-    y_{itjk} - \hat y_{itjk} = \varepsilon_{itjk} \sim N(0, \Sigma).
+    y_{itjk} - \hat y_{itjk} = \varepsilon_{itjk} \sim N(0, \mathbf \Sigma).
   \]
 \end{frame}
 
+
 \begin{frame}
-  \frametitle{Example - Priors}
-  We model priors for our coefficients as 
-  \begin{align*}
-    \mu &\sim 1,\\
-    \alpha_j &\sim N(0, \sigma_{batch}^2I),\\ 
-    \gamma_t &\sim N(0, \sigma_{time}^2I),\\ 
-    \beta_i | A &\sim (1 - A)\times I(\beta = 0) + A \times N(0, \sigma_{treat}^2I), \\ 
-    (\gamma\beta)_{it} &\sim (1 - A) \times I(\beta = 0) + A \times N(0, \sigma_{interact}^2I),
-  \end{align*}
-  and each $\sigma_\cdot^2\sim IG(0.001, 0.001)$.
-  \vfill
-  However, the prior for $\Sigma$ is a bit more tricky. 
+  \frametitle{Problem - Variance}
+  The human genome contains approximately $20\_000 genes$. 
+  Therefore, $\mathbf \Sigma$ would be approximately $20\_000\times 20\_000$. 
+  Assuming $\mathbf \Sigma$ was populated with 64-bit floating point numbers, this matrix would occupy 3.2GB worth of memory, and would be computationally infeasible to perform many basic operations on. 
 \end{frame}
 
 \begin{frame}
-  \frametitle{Example - Prior Variance}
-  The human genome contains approximately 20\_000 genes. 
-  Therefore, $\Sigma$ would be approximately $20\_000\times 20\_000$. 
-  Assuming $\Sigma$ was populated with 64-bit floating point numbers, this matrix would occupy 3.2GB worth of RAM. 
+  \frametitle{A first step - Marginalization }
+  Suppose we want to fit 
+  \[
+    \mathbf Y_{n\times G} | \mathbf X, \mathbf Z, \mathbf B, \mathbf A, \mathbf \Sigma, \delta = 
+      \mathbf X_{n\times k_0} (\mathbf B_\delta)_{k_0 \times |\delta|}(\mathbf R_\delta)_{|\delta|\times G} + 
+      \mathbf Z_{n \times k_1} \mathbf A_{k_1 \times G} + 
+      \mathbf E,
+  \]
+  where,
+  \begin{itemize}
+    \item $\mathbf E \sim IW(\mathbf\Sigma, \nu)$,
+    \item $\mathbf A \sim MN_{n,G}(\mathbf A_0, \mathbf\Lambda_{0A}, \frac{1}{\kappa_{0,A}}\mathbf\Sigma)$,
+    \item $\mathbf B_\delta \sim MN_{n, |\delta|}(\mathbf B_{0\delta}, \mathbf\Lambda_{0B}, \frac{1}{\kappa_{0, B}}\mathbf\Sigma_\delta)$,
+    \item $\delta$ is a length $G$ binary vector 
+    \item $R_\delta\in\mathbb R^{|\delta|\times G}$ is the matrix that inserts zero columns upon right-multiplication 
+  \end{itemize}
+\end{frame}
 
+\begin{frame}
+  \frametitle{Marginalization (cont'd).}
+  Then (TODO: NEED TO VERIFY)
+
+  \[
+    \mathbf Y | \delta \sim T_{n, G}(
+      \nu, 
+      \mathbf Z\mathbf A_0 + \mathbf X\mathbf B_{0,\delta}\mathbf R_\delta, 
+      \mathbf I + \mathbf X \mathbf\Lambda_{0B}\mathbf X' + \mathbf Z\mathbf\Lambda_{0A}\mathbf Z', 
+      \frac{1 + \kappa_{0A}}{\kappa_{0A}}\mathbf\Sigma + \frac{1}{\kappa_{0B}}\mathbf R_\delta'\mathbf\Sigma_\delta\mathbf R_\delta
+    ).
+  \]
+  This is useful, as we can avoid sampling coefficients and variances. 
+  However, it still doesn't address the issue of needing to invert a massive matrix at each iteration. 
+  \vfill 
+
+  \[
+    P(\delta_J = 1 | Y, \delta_{\setminus J}) = \left(
+      1 + \frac{P(\mathbf Y|\delta_J = 0, \delta_{\setminus J})}{P(\mathbf Y|\delta_J = 1, \delta_{\setminus J})} \times 
+      \frac{1 - P(\delta_J = 1 | \delta_{\setminus J})}{P(\delta_J = 1 | \delta_{\setminus J})}
+    \right)^{-1}
+  \]
+  The above equation enables us to perform Gibbs sampling on activity indicators.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Utilizing GRNs}
+  To avoid the large variance matrix, I propose the integration of gene regulatory networks into the analysis. 
+  Such methods have been used before~\cite{Wang-2024-GINtool, Alexeyenko-2012-networkGSEA}. 
+  However, to my knowledge, such methods, again, do not account for the problem of gene set overlap.  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Benefits of GRNs}
+  GRNs can enable  
+  \begin{itemize}
+      \item smaller models \begin{itemize}
+	\item ~\cite{Fang-2021-GRNdb} lists 254\_792 TF-Target pairs, as opposed to the 400\_000\_000 needed in the previous formulation 
+      \end{itemize}
+    \item directionality, as in~\cite{Wang-2024-GINtool}
+    \item re-use of existing structures and packages to simplify analysis 
+  \end{itemize} 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Possible Applications - DAGs}
+
+  \begin{enumerate}
+    \item With DAG's 
+      \begin{itemize}
+	\item add, as regressors to each gene, the expression level of its parents from the same sample 
+      \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Possible Applications - non-DAGs}
+\end{frame} 
+
+\begin{frame}[allowframebreaks]
+  \bibliography{main} 
+  \bibliographystyle{apalike}
 \end{frame}
 
 \end{document}

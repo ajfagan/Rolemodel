@@ -3,37 +3,45 @@
 #[cfg(test)]
 mod tests {
 
-    use std::{
-        rc::Rc,
-        cell::RefCell,
-        ops::Deref,
-    };
-
     use rolemodel_gsea::{
-        Activeable, GOGeneListRolemodel, Gene, GeneOntology, GeneSet, Node, Part, Rolemodel, Saveable, SaveableData, Term, Whole
+        Activeable, GOGeneListRolemodel, Gene, GeneOntology, GeneSet, Node, Rolemodel, Saveable, SaveableData, Term, Whole
     };
     use rv::data::Booleable;
 
 
     #[test]
     fn basic_gene_ont() {
-        let mut gene_ontology = GeneOntology::<bool, bool>::new(
-            vec![Rc::new(RefCell::new(Gene::new(true, vec![])))],
-            vec![]);
-        let gene = gene_ontology.genes()[0].clone();
-        gene_ontology.mut_terms().push(Rc::new(RefCell::new(Term::new(false, vec![gene]))));
+        let gene_ontology = GeneOntology::<usize, bool, bool>::new(
+            vec![Gene::new(0, true, vec![0])],
+            vec![Term::new(0, false, vec![0])]);
 
         assert_eq!(
-            *gene_ontology.iter_wholes().next().unwrap().borrow().parts().next().unwrap().ref_data().deref(), 
+            gene_ontology.wholes()[0].iter_parts(gene_ontology.parts()).next().unwrap().data().get(), 
             true
         );
     }
 
     #[test]
     fn larger_gene_ont() {
-        let gene_ontology = GeneOntology::<bool, bool>::from_incidence(
-            vec![true, false, true, true, true, false, false, false, false, true], 
-            vec![false, true, false, false],
+        let gene_ontology = GeneOntology::<usize, bool, bool>::from_incidence(
+            vec![
+                (0,true), 
+                (1,false), 
+                (2,true), 
+                (3,true), 
+                (4,true), 
+                (5,false), 
+                (6,false), 
+                (7,false), 
+                (8,false), 
+                (9,true)
+            ], 
+            vec![
+                (0,false), 
+                (1,true), 
+                (2,false), 
+                (3,false)
+            ],
             vec![
                 (0,0), (0,1), (0,4),
                 (1,1), (1,5), (1,8), (1,9),
@@ -42,7 +50,9 @@ mod tests {
             ],
         );
 
-        let result: Vec<usize> = gene_ontology.iter_wholes().map(|whole| whole.parts().size_hint().0).collect();
+        let result: Vec<usize> = gene_ontology.iter_wholes().map(|whole| 
+            whole.iter_parts(gene_ontology.genes()).fold(0, |curr, _| curr + 1)
+        ).collect();
 
         assert_eq!(result, vec![3, 4, 1, 2]);
     }
@@ -53,7 +63,7 @@ mod tests {
         let term_data_file = None;
         let adj_file = "./tests/data/atovaquone-rnaseq/adjacency.csv".to_string();
 
-        let gene_ontology = GeneOntology::<f64, f64>::read_scalar_data(
+        let gene_ontology = GeneOntology::<String, f64, f64>::read_scalar_data(
             gene_data_file, 
             Some("gene".into()), Some("padj".into()), 
             term_data_file, 
@@ -63,8 +73,8 @@ mod tests {
         );
 
         assert_eq!(
-            gene_ontology.terms()[0].ref_data().deref(),
-            &0.0
+            gene_ontology.terms()[0].data().get(),
+            0.0
         );
     }
 
@@ -117,7 +127,7 @@ mod tests {
         }
     }
     
-    #[derive(Debug, Default)]
+    #[derive(Debug, Default, Copy, Clone)]
     struct TermData {
         activity: SaveableData<bool>,
     }
@@ -158,7 +168,7 @@ mod tests {
         let adj_file = "./tests/data/atovaquone-rnaseq/adjacency.csv".to_string();
 
         let gene_ontology = GeneOntology
-            ::<TermData, GeneData>
+            ::<String, TermData, GeneData>
             ::read_apply_scalar_data::<f64, _, bool, _>
         (
             gene_data_file, 
@@ -171,7 +181,7 @@ mod tests {
                 data: x > 0.01,
                 activity: SaveableData::new(false, false)
             }, 
-            |x| TermData { activity: SaveableData::new(false, false) },
+            |_| TermData { activity: SaveableData::new(false, false) },
         );
 
         let mut rolemodel = GOGeneListRolemodel::new(
